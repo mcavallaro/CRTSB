@@ -1,0 +1,212 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>script</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-03-10"><meta name="DC.source" content="script.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Demonstration of the Gillespie algorithm</a></li><li><a href="#2">Phase plane</a></li><li><a href="#3">Average behaviour</a></li></ul></div><h2 id="1">Demonstration of the Gillespie algorithm</h2><p>The model consists of two reagents:</p><div><ul><li>x(1) is the initial number of preys,</li><li>x(2) is the initial number of predators,</li></ul></div><p>and three reactions:</p><div><ul><li>R1: x(1), x(2) -&gt; x(1)+1, x(2), at rate c1 * x(1)</li><li>R2: x(1), x(2) -&gt; x(1)-1, x(2)+1, at rate c2 * x(1) * x(2)</li><li>R3: x(1), x(2) -&gt; x(1), x(2)-1, at rate c(3) * x(2)</li></ul></div><pre class="codeinput"><span class="comment">% Set parameters and initial condition</span>
+c1=1;
+c2=0.005;
+c3=0.6;
+initial_condition = [50, 100];
+t_max = 20;
+
+<span class="comment">% simulate a single stochatic trajectory</span>
+[t,X] = LV_SSA(initial_condition, c1,c2,c3, t_max);
+
+plot(t, X(:,1), t, X(:,2));
+legend(<span class="string">'Prey SSA'</span>, <span class="string">'Predator SSA'</span>);
+title(<span class="string">'Lotka-Volterra Reaction - sample stochastic vs determinatic trajectories'</span>);
+xlabel(<span class="string">'Time'</span>);
+
+<span class="comment">% compare with the deterministic solution</span>
+<span class="comment">% see `help ode45`</span>
+[t1,X1] = ode45(@(t,x) LV_derivative(x,c1,c2,c3), [0,t_max], initial_condition);
+hold <span class="string">on</span>
+plot(t1, X1)
+legend(<span class="string">'Prey SSA'</span>, <span class="string">'Predator SSA'</span>, <span class="string">'Prey ODE'</span>, <span class="string">'Predator ODE'</span>);
+</pre><img vspace="5" hspace="5" src="script_01.png" alt=""> <h2 id="2">Phase plane</h2><pre class="codeinput">hold <span class="string">off</span>
+plot(X(:,1), X(:,2));
+hold <span class="string">on</span>
+plot(X1(:,1), X1(:,2))
+xlabel(<span class="string">'Prey'</span>);
+ylabel(<span class="string">'Predator'</span>);
+</pre><img vspace="5" hspace="5" src="script_02.png" alt=""> <h2 id="3">Average behaviour</h2><p>Use the stepper function to check that the average stochastic trajectory is consistent with the ODE.</p><pre class="codeinput"><span class="comment">% It is convenient to allocate memory for 100 trajectories.</span>
+dt=0.5;
+n_steps=t_max/dt;
+x=zeros(n_steps, 2, 1000);
+
+<span class="comment">%initialise</span>
+<span class="keyword">for</span> j = 1:1000
+   x(1,:,j) = initial_condition;
+<span class="keyword">end</span>
+
+<span class="comment">%simulate</span>
+<span class="keyword">for</span> j = 1:1000
+    i=0;
+    t=dt;
+    <span class="keyword">while</span> t &lt; t_max
+        i=i+1;
+        x(i+1,:,j)=LV_SSA_stepper(x(i,:,j), c1,c2,c3, dt);
+        t=t+dt;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% compare the typical trajactory with the ODE</span>
+hold <span class="string">off</span>;
+plot(linspace(0,t_max, n_steps), mean(x(:,1,:),3))
+hold <span class="string">on</span>;
+<span class="comment">%plot(linspace(0,t_max, n_steps), mean(x(:,2,:),3))</span>
+plot(t1, X1(:,1));
+xlabel(<span class="string">'Time'</span>);
+ylabel(<span class="string">"Average number of preys"</span>);
+legend(<span class="string">"Average SSA"</span>, <span class="string">"ODE"</span>);
+</pre><img vspace="5" hspace="5" src="script_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Demonstration of the Gillespie algorithm 
+% The model consists of two reagents:
+%
+% * x(1) is the initial number of preys,
+% * x(2) is the initial number of predators,
+%
+% and three reactions:
+%
+% * R1: x(1), x(2) -> x(1)+1, x(2), at rate c1 * x(1)
+% * R2: x(1), x(2) -> x(1)-1, x(2)+1, at rate c2 * x(1) * x(2)
+% * R3: x(1), x(2) -> x(1), x(2)-1, at rate c(3) * x(2)
+%
+
+% Set parameters and initial condition
+c1=1;
+c2=0.005;
+c3=0.6;
+initial_condition = [50, 100];
+t_max = 20;
+
+% simulate a single stochatic trajectory
+[t,X] = LV_SSA(initial_condition, c1,c2,c3, t_max);
+
+plot(t, X(:,1), t, X(:,2));
+legend('Prey SSA', 'Predator SSA');
+title('Lotka-Volterra Reaction - sample stochastic vs determinatic trajectories');
+xlabel('Time');
+
+% compare with the deterministic solution
+% see `help ode45`
+[t1,X1] = ode45(@(t,x) LV_derivative(x,c1,c2,c3), [0,t_max], initial_condition); 
+hold on
+plot(t1, X1)
+legend('Prey SSA', 'Predator SSA', 'Prey ODE', 'Predator ODE');
+
+%% Phase plane
+hold off
+plot(X(:,1), X(:,2));
+hold on
+plot(X1(:,1), X1(:,2))
+xlabel('Prey');
+ylabel('Predator');
+
+
+%% Average behaviour
+% Use the stepper function to check that the average stochastic trajectory is consistent
+% with the ODE.
+
+% It is convenient to allocate memory for 100 trajectories.
+dt=0.5;
+n_steps=t_max/dt;
+x=zeros(n_steps, 2, 1000);
+
+%initialise
+for j = 1:1000
+   x(1,:,j) = initial_condition;
+end
+
+%simulate
+for j = 1:1000
+    i=0;
+    t=dt;
+    while t < t_max
+        i=i+1;
+        x(i+1,:,j)=LV_SSA_stepper(x(i,:,j), c1,c2,c3, dt);
+        t=t+dt;
+    end
+end
+
+% compare the typical trajactory with the ODE
+hold off;
+plot(linspace(0,t_max, n_steps), mean(x(:,1,:),3))
+hold on;
+%plot(linspace(0,t_max, n_steps), mean(x(:,2,:),3))
+plot(t1, X1(:,1));
+xlabel('Time');
+ylabel("Average number of preys");
+legend("Average SSA", "ODE");
+
+
+%%
+
+
+##### SOURCE END #####
+--></body></html>
