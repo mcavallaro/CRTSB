@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>script</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-03-10"><meta name="DC.source" content="script.m"><style type="text/css">
+      --><title>script</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-03-18"><meta name="DC.source" content="script.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -103,6 +103,7 @@ x=zeros(n_steps, 2, 1000);
    x(1,:,j) = initial_condition;
 <span class="keyword">end</span>
 
+
 <span class="comment">%simulate</span>
 <span class="keyword">for</span> j = 1:1000
     i=0;
@@ -116,13 +117,13 @@ x=zeros(n_steps, 2, 1000);
 
 <span class="comment">% compare the typical trajactory with the ODE</span>
 hold <span class="string">off</span>;
-plot(linspace(0,t_max, n_steps), mean(x(:,1,:),3))
-hold <span class="string">on</span>;
+plot(0:dt:t-dt, mean(x(:,1,:),3))
 <span class="comment">%plot(linspace(0,t_max, n_steps), mean(x(:,2,:),3))</span>
+hold <span class="string">on</span>;
 plot(t1, X1(:,1));
 xlabel(<span class="string">'Time'</span>);
 ylabel(<span class="string">"Average number of preys"</span>);
-legend(<span class="string">"Average SSA"</span>, <span class="string">"ODE"</span>);
+legend(<span class="string">"Average SSA"</span>,  <span class="string">"ODE"</span>);
 </pre><img vspace="5" hspace="5" src="script_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Demonstration of the Gillespie algorithm 
@@ -183,6 +184,7 @@ for j = 1:1000
    x(1,:,j) = initial_condition;
 end
 
+
 %simulate
 for j = 1:1000
     i=0;
@@ -196,13 +198,13 @@ end
 
 % compare the typical trajactory with the ODE
 hold off;
-plot(linspace(0,t_max, n_steps), mean(x(:,1,:),3))
-hold on;
+plot(0:dt:t-dt, mean(x(:,1,:),3))
 %plot(linspace(0,t_max, n_steps), mean(x(:,2,:),3))
+hold on;
 plot(t1, X1(:,1));
 xlabel('Time');
 ylabel("Average number of preys");
-legend("Average SSA", "ODE");
+legend("Average SSA",  "ODE");
 
 
 %%

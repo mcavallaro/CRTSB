@@ -56,6 +56,7 @@ for j = 1:1000
    x(1,:,j) = initial_condition;
 end
 
+
 %simulate
 for j = 1:1000
     i=0;
@@ -69,13 +70,13 @@ end
 
 % compare the typical trajactory with the ODE
 hold off;
-plot(linspace(0,t_max, n_steps), mean(x(:,1,:),3))
-hold on;
+plot(0:dt:t-dt, mean(x(:,1,:),3))
 %plot(linspace(0,t_max, n_steps), mean(x(:,2,:),3))
+hold on;
 plot(t1, X1(:,1));
 xlabel('Time');
 ylabel("Average number of preys");
-legend("Average SSA", "ODE");
+legend("Average SSA",  "ODE");
 
 
 %%
